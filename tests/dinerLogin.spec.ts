@@ -96,3 +96,11 @@ test('Go to broken page', async ({ page }) => {
 
   await expect(page.getByText('pizza on the floor')).toBeVisible();
 })
+
+test('logout', async ({ page }) => {
+  await loginAsDiner(page);
+  await page.getByRole('link', { name: 'Logout' }).click();
+
+  await expect(page.getByRole('button', { name: 'Logout' })).not.toBeVisible();
+  await expect(page.getByRole('link', { name: 'Login', exact: true })).toBeVisible();
+})
