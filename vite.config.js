@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [
         istanbul({
             include: ['src/**/*'],
-            exclude: ['node_modules'],
+            exclude: ['node_modules', 'tests/**/*', '.github/**/*', '.idea/**/*', '.nyc_output/**/*', 'coverage/**/*', 'incidentReports/**/*', 'playwright-report/**/*', 'test-results/**/*'],
             requireEnv: false,
         }),
     ],
