@@ -140,12 +140,13 @@ Initialize components whenever the page location changes.
 import { useLocation, Routes, Route, NavLink } from 'react-router-dom';
 
 export default function App() {
-  const location = useLocation();
+    const location = useLocation();
 
-  useEffect(() => {
-    window.HSStaticMethods.autoInit();
-  }, [location.pathname]);
-  //...
+    useEffect(() => {
+        window.HSStaticMethods.autoInit();
+    }, [location.pathname]);
+    //...
+}
 ```
 
 ### Icons
