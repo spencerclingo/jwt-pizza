@@ -228,10 +228,9 @@ export async function setupMocks(page: any) {
         franchiseRes.franchises.push(createFranchiseRes)
         await route.fulfill({ json: createFranchiseRes });
     });
-    await page.route('*/**/api/user/*', async (route: any) => {
+    await page.route(/api\/user\/(?!me$).*/, async (route: any) => {
         const requestBody = route.request().postDataJSON();
         loginAsDiner2Res.user.name = requestBody.name;
-        console.log(loginAsDiner2Res);
         await route.fulfill({ json: loginAsDiner2Res });
     });
 }
