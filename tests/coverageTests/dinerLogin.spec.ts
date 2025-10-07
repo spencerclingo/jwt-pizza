@@ -1,5 +1,5 @@
 import { test, expect } from 'playwright-test-coverage';
-import { loginAsDiner, loginAsDinerReq, loginAsDinerRes, registerReq, registerRes, setupMocks } from "./testUtil";
+import { loginAsDiner, loginAsDinerReq, loginAsDinerRes, registerReq, registerRes, setupMocks } from "../testUtil";
 
 test('home page', async ({ page }) => {
   await page.goto('/');

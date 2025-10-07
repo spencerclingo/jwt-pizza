@@ -1,5 +1,5 @@
 import { test, expect } from 'playwright-test-coverage';
-import {createFranchise, createFranchiseReq, createFranchiseRes, loginAsAdmin, setupMocks} from "./testUtil";
+import {createFranchise, createFranchiseReq, createFranchiseRes, loginAsAdmin, setupMocks} from "../testUtil";
 
 test('login as admin', async ({ page }) => {
     await loginAsAdmin(page);
