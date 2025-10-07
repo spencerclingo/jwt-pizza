@@ -11,6 +11,19 @@ export async function loginAsDiner(page: any) {
     await page.getByRole('button', { name: 'Login' }).click();
 }
 
+export async function loginAsChangingDiner(page: any) {
+    await page.route('*/**/api/auth', async (route: any) => {
+        await route.fulfill({ json: loginAsDiner2Res });
+    });
+
+    await page.goto('http://localhost:5173/');
+    await page.getByRole('link', { name: 'Login' }).click();
+
+    await page.getByRole('textbox', { name: 'Email address' }).fill(loginAsDiner2Req.email);
+    await page.getByRole('textbox', { name: 'Password' }).fill(loginAsDiner2Req.password);
+    await page.getByRole('button', { name: 'Login' }).click();
+}
+
 export async function loginAsAdmin(page: any) {
     await page.route('*/**/api/auth', async (route: any) => {
         await route.fulfill({ json: loginAsAdminRes });
@@ -25,6 +38,17 @@ export async function loginAsAdmin(page: any) {
 
 export const loginAsDinerReq = { email: 'diner@jwt.com', password: 'diner' };
 export const loginAsDinerRes = {
+    user: {
+        id: 3,
+        name: 'fullName',
+        email: 'diner@jwt.com',
+        roles: [{ role: 'diner' }],
+    },
+    token: 'fake_token',
+};
+
+export const loginAsDiner2Req = { email: 'diner@jwt.com', password: 'diner' };
+export const loginAsDiner2Res = {
     user: {
         id: 3,
         name: 'fullName',
@@ -203,6 +227,12 @@ export async function setupMocks(page: any) {
     await page.route('*/**/api/franchise', async (route: any) => {
         franchiseRes.franchises.push(createFranchiseRes)
         await route.fulfill({ json: createFranchiseRes });
+    });
+    await page.route('*/**/api/user/*', async (route: any) => {
+        const requestBody = route.request().postDataJSON();
+        loginAsDiner2Res.user.name = requestBody.name;
+        console.log(loginAsDiner2Res);
+        await route.fulfill({ json: loginAsDiner2Res });
     });
 }
 
