@@ -2,7 +2,7 @@
 
 ![Coverage badge](https://pizza-factory.cs329.click/api/badge/sclingo/jwtpizzacoverage)
 
-[![CI Pipeline](https://github.com/spencerclingo/jwt-pizza/actions/workflows/pizzaPipeline.yml/badge.svg)](https://github.com/spencerclingo/jwt-pizza/actions/workflows/pizzaPipeline.yml) 
+[![CI Pipeline](https://github.com/spencerclingo/jwt-pizza/actions/workflows/pizzaPipeline.yml/badge.svg?force=true)](https://github.com/spencerclingo/jwt-pizza/actions/workflows/pizzaPipeline.yml) 
 
 A JSON Web Token, or [JWT](https://jwt.io/introduction), (pronounced JOT) is a digitally signed transfer of information using JSON notation. Because you can validate the digital signature you can buy JWT pizzas with confidence.
 
