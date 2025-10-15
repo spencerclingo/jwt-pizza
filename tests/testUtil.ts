@@ -209,6 +209,29 @@ export const createFranchiseRes = {
         }
     ]
 }
+export const getAllUsersRes = {
+    more: false,
+    users: [
+        {
+            id: 1,
+            name: "fullName",
+            email: "existingEmail@jwt.com",
+            roles: "diner, franchisee"
+        },
+        {
+            id: 2,
+            name: "name",
+            email: "existingEmail@jwt.com",
+            roles: "diner"
+        },
+        {
+            id: 3,
+            name: "admin",
+            email: "admin@jwt.com",
+            roles: "admin"
+        }
+    ]
+}
 
 export async function setupMocks(page: any) {
     await page.route('*/**/api/order/menu', async (route: any) => {
@@ -218,6 +241,9 @@ export async function setupMocks(page: any) {
         await route.fulfill({ json: franchiseRes });
         franchiseRes = originalFranchiseRes;
     });
+    await page.route('*/**/api/user?page=0&limit=*&name=*', async (route: any) => {
+        await route.fulfill({ json: getAllUsersRes})
+    })
     await page.route('*/**/api/user/me', async (route: any) => {
         await route.fulfill({ json: meRes });
     });

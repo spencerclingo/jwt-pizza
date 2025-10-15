@@ -1,4 +1,17 @@
-import { PizzaService, Franchise, FranchiseList, Store, OrderHistory, User, Menu, Order, Endpoints, OrderResponse, JWTPayload } from './pizzaService';
+import {
+  PizzaService,
+  Franchise,
+  FranchiseList,
+  Store,
+  OrderHistory,
+  User,
+  Menu,
+  Order,
+  Endpoints,
+  OrderResponse,
+  JWTPayload,
+  UserList
+} from './pizzaService';
 
 const pizzaServiceUrl = import.meta.env.VITE_PIZZA_SERVICE_URL;
 const pizzaFactoryUrl = import.meta.env.VITE_PIZZA_FACTORY_URL;
@@ -75,6 +88,7 @@ class HttpPizzaService implements PizzaService {
   }
 
   async getOrders(user: User): Promise<OrderHistory> {
+    console.log("You need to check if one user can see another users history, a user is passed in and not used")
     return this.callEndpoint('/api/order');
   }
 
@@ -96,6 +110,10 @@ class HttpPizzaService implements PizzaService {
 
   async getFranchises(page: number = 0, limit: number = 10, nameFilter: string = '*'): Promise<FranchiseList> {
     return this.callEndpoint(`/api/franchise?page=${page}&limit=${limit}&name=${nameFilter}`);
+  }
+
+  async getUsersList(page: number = 0, limit: number = 10, filter: string = '*'): Promise<UserList> {
+    return this.callEndpoint(`/api/user?page=${page}&limit=${limit}&name=${filter}`);
   }
 
   async closeFranchise(franchise: Franchise): Promise<void> {
@@ -121,6 +139,10 @@ class HttpPizzaService implements PizzaService {
     const { user, token } = await this.callEndpoint(`/api/user/${updatedUser.id}`, 'PUT', updatedUser);
     localStorage.setItem('token', token);
     return Promise.resolve(user);
+  }
+
+  async deleteUser(userId: string): Promise<UserList> {
+    return this.callEndpoint(`/api/user/${userId}`, 'DELETE');
   }
 }
 

@@ -1,5 +1,5 @@
 import { test, expect } from 'playwright-test-coverage';
-import {loginAsChangingDiner, loginAsDiner2Res, setupMocks} from "../testUtil";
+import {loginAsAdmin, loginAsChangingDiner, loginAsDiner2Res, setupMocks} from "../testUtil";
 
 test('updateUser', async ({ page }) => {
     await loginAsChangingDiner(page);
@@ -22,4 +22,15 @@ test('updateUser', async ({ page }) => {
     await page.getByRole('link', { name: 'pd', exact: true }).click();
 
     await expect(page.getByRole('main')).toContainText('pizza dinerx');
+});
+
+test('users are displayed', async ({ page }) => {
+    await loginAsAdmin(page);
+    await setupMocks(page);
+
+    await page.getByRole('link', { name: 'Admin' }).click();
+    await expect(page.getByText("Users")).toBeVisible();
+
+    await expect(page.getByText("fullName")).toBeVisible();
+    await expect(page.getByText("diner, franchisee")).toBeVisible();
 });
