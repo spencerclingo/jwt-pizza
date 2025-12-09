@@ -1,11 +1,13 @@
 # Penetration Test Report
 
 **Peer 1:** Spencer Clingo (pizza.pizza-spencer.click)
+
 **Peer 2:** German Rios-Lazo (pizza.germanrl.click)
 
-## Self Attack
+# Self Attack
 
-**Attacker:** Peer 1
+## Peer 1 - Spencer Clingo
+
 **Target:** pizza.pizza-spencer.click
 
 ### Attack 1: Default Admin Login
@@ -40,18 +42,42 @@
 -   **Description:** Attempted to update all passwords by injecting a SQL query into the name parameter of a user update request. The attack failed to alter the database.
 -   **Corrections:** Input sanitization prevents SQL injection in the User PUT endpoint.
 
-## Self Attack
+## Peer 2 - German Rios-Lazo
 
-**Attacker:** Peer 2
 **Target:** pizza.germanrl.click
 
 ### Attack 1:
 
+| Item           | Result                                               |
+| -------------- | -----------------------------------------------------|
+| Date           | December 9, 2025                                     |
+| Target         | pizza.germanrl.click                                 |
+| Classification | Injection                                            |
+| Severity       | 2 - High                                             |
+| Description    | Injected a SQL query by entering it in the name field when updating a user. The attack was successful, and I was able to update all usernames in the database. Similar queries can potentially be injected to change passwords, delete all users, etc. |
+| Images         | ![SQL Injection](Peer2SQLInjectionSelfA.png) <br/> ![After SQL Injection](Peer2SQLInjectionSelfB.png) |
+| Corrections    | Sanitize inputs in SQL query when updating user.     |
+
+### Attack 2:
+
+| Item           | Result                                               |
+| -------------- | -----------------------------------------------------|
+| Date           | December 9, 2025                                     |
+| Target         | pizza.germanrl.click                                 |
+| Classification | Injection / Request Tampering                        |
+| Severity       | 3 - Medium                                           |
+| Description    | Injected a price of 0.0 for a pizza order by intercepting and modifying the request using the Burp Suite. Once the order was completed and validated, it still showed a price of 0, which basically means getting free pizzas. |
+| Images         | ![Before Request Intercept](Peer2RequestInterceptSelfA.png) <br/> ![Request Intercept](Peer2RequestInterceptSelfB.png) <br/> ![After Request Intercept](Peer2RequestInterceptSelfC.png) |
+| Corrections    | Ensure that important transaction data is stored securely in the database and retrieved from there instead of passing it unnecessarily in an HTTP request that can be intercepted. |
+
 ---
 
-## Peer Attack
+# Peer Attack
 
-**Attacker:** Peer 1
+## Peer 1 attack on peer 2
+
+**Attacker:** Spencer Clingo
+
 **Target:** pizza.germanrl.click
 
 ### Attack 1: Default Admin Login
@@ -104,17 +130,42 @@
     -   **Impact:** Any account where the email is known can be accessed. Emails could also be changed using a similar tactic.
 -   **Corrections:** Sanitize all user inputs in the update endpoints. Use parameterized queries.
 
-## Peer Attack
+## Peer 2 attack on peer 1
 
-**Attacker:** Peer 2
+**Attacker:** German Rios-Lazo
+
 **Target:** pizza.pizza-spencer.click
 
 ### Attack 1:
+
+| Item           | Result                                               |
+| -------------- | -----------------------------------------------------|
+| Date           | December 8, 2025                                     |
+| Target         | pizza.pizza-spencer.click                            |
+| Classification | Injection                                            |
+| Severity       | 0 - Unsuccessful                                     |
+| Description    | Attempted SQL injection by entering a query in the name field when updating a user. The attack was unsuccessful, which means that the inputs are being sanitized correctly. |
+| Images         | ![SQL Injection](Peer2SQLInjectionPeer1.png)         |
+| Corrections    | None needed.                                         |
+
+### Attack 2:
+
+| Item           | Result                                               |
+| -------------- | -----------------------------------------------------|
+| Date           | December 8, 2025                                     |
+| Target         | pizza.pizza-spencer.click                            |
+| Classification | Injection / Request Tampering                        |
+| Severity       | 0 - Unsuccessful                                     |
+| Description    | Attempted unsuccessfully to inject a price of 0.0 to an order by intercepting the request using the Burp Suite, modifying it, and forwarding it to the server. |
+| Images         | ![Request Intercept](Peer2RequestInterceptPeer1.png) |
+| Corrections    | None needed.                                         |
 
 ---
 
 ## Combined Summary of Learnings
 
-Through this penetration testing exercise, we identified that **Input Sanitization** and **Default Credentials** are critical vulnerabilities.
+Through this penetration testing exercise, we identified that Input Sanitization and Default Credentials are critical vulnerabilities. When credentials are left at the default values, companies risk someone with knowledge of how the resource begins easily penetrating all security measures. 
 
-TODO: Expand on these learnings 
+If not handled properly, SQL injection is a powerful attack that can allow malicious actors to obtain or modify user credentials. If a user with an admin role is compromised, attackers can even get full access to the application by exploiting this type of vulnerability. Input sanitization and using parameterized queries are the best ways to prevent SQL injection.
+
+Intercepting and tampering with HTTP requests is another attack vector that allows hackers to inject their own data into an application. In the case of monetary transactions, this can lead to financial loss, fraud, and many other consequences. To prevent this, it is necessary to enforce strong server-side validations, and to avoid passing data as parameters that should be stored securely somewhere else, outside of the control of the user.
